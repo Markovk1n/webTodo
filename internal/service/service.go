@@ -1,8 +1,12 @@
 package service
 
-import "github.com/markovk1n/webTodo/internal/repository"
+import (
+	"github.com/markovk1n/webTodo/internal/repository"
+	"github.com/markovk1n/webTodo/pkg/models"
+)
 
 type Authorization interface {
+	CreateUser(user models.User) (int, error)
 }
 type TodoList interface {
 }
@@ -16,5 +20,7 @@ type Service struct {
 }
 
 func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Authorization: NewAuthService(repos.Authorization),
+	}
 }
