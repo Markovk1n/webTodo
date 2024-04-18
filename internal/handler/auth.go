@@ -36,7 +36,7 @@ func (h *Handler) singIn(c *gin.Context) {
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		c.JSON(http.StatusBadRequest, "ahshdauhdiuahdiushaidhaishdsaiuhdiuahdia")
+
 		return
 	}
 
