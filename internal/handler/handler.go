@@ -2,7 +2,12 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "github.com/markovk1n/webTodo/docs"
+
 	"github.com/markovk1n/webTodo/internal/service"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 type Handler struct {
@@ -13,8 +18,17 @@ func NewHandler(service *service.Service) *Handler {
 	return &Handler{services: service}
 }
 
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", h.singUp)
