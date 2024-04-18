@@ -9,7 +9,7 @@ type TodoListService struct {
 	repo repository.TodoList
 }
 
-func NewTodoService(repo repository.TodoList) *TodoListService {
+func NewTodoListService(repo repository.TodoList) *TodoListService {
 	return &TodoListService{repo: repo}
 }
 
