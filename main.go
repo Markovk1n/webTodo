@@ -5,16 +5,16 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/markovk1n/webTodo/configs"
 	"github.com/markovk1n/webTodo/internal/handler"
+	"github.com/markovk1n/webTodo/internal/models"
 	"github.com/markovk1n/webTodo/internal/repository"
 	"github.com/markovk1n/webTodo/internal/server"
 	"github.com/markovk1n/webTodo/internal/service"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 // @title Todo App API
@@ -30,19 +30,21 @@ import (
 func main() {
 	log := logrus.New()
 
-	if err := configs.InitConfig(); err != nil {
-		log.Fatalf("cant read config %s", err)
+	cfg, err := configs.InitConfigs()
+	if err != nil {
+		log.Fatalf("error with loading conf datas: %s", err.Error())
+
 	}
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("error loading env variables: %s", err.Error())
-	}
-	db, err := repository.NewPostgresDB(repository.Config{
-		Host:     viper.GetString("db.host"),
-		Port:     viper.GetString("db.port"),
-		Username: viper.GetString("db.username"),
-		DBName:   viper.GetString("db.dbname"),
-		SSLMode:  viper.GetString("db.sslmode"),
-		Password: os.Getenv("DB_PASSWORD"),
+	log.Println("Wait db creating")
+	time.Sleep(10 * time.Second)
+
+	db, err := repository.NewPostgresDB(models.Postgres{
+		Host:     cfg.Postgres.Host,
+		Port:     cfg.Postgres.Port,
+		Username: cfg.Postgres.Username,
+		Password: cfg.Postgres.Password,
+		DBName:   cfg.Postgres.DBName,
+		SSLMode:  cfg.Postgres.SSLMode,
 	})
 	if err != nil {
 		log.Fatalf("failed to initialize db: %s", err.Error())
@@ -54,8 +56,8 @@ func main() {
 
 	srv := new(server.Server)
 	go func() {
-		if err := srv.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
-			log.Fatalf("Server cant run %s", err.Error())
+		if err = srv.Run("8080", handler.InitRoutes()); err != nil {
+			logrus.Fatalf("error occured while running http server: %s", err.Error())
 		}
 	}()
 	log.Print("TodoApp Started")

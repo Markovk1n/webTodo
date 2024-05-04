@@ -1,8 +1,8 @@
 package service
 
 import (
+	"github.com/markovk1n/webTodo/internal/models"
 	"github.com/markovk1n/webTodo/internal/repository"
-	"github.com/markovk1n/webTodo/pkg/models"
 )
 
 type TodoItemService struct {

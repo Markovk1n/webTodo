@@ -1,0 +1,25 @@
+
+services:
+  todoweb:
+    build: ./
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PASSWORD=root
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_NAME=postgres
+      - DB_SSL_MODE=disable
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+      - .:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5436:5432

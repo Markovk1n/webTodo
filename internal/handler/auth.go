@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/markovk1n/webTodo/pkg/models"
+	"github.com/markovk1n/webTodo/internal/models"
 )
 
 // @Summary SignUp

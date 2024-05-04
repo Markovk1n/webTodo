@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/markovk1n/webTodo/pkg/models"
+	"github.com/markovk1n/webTodo/internal/models"
 )
 
 func (h *Handler) createItem(c *gin.Context) {

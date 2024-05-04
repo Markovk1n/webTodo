@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/markovk1n/webTodo/internal/models"
 	"github.com/markovk1n/webTodo/internal/repository"
-	"github.com/markovk1n/webTodo/pkg/models"
 )
 
 const (

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/markovk1n/webTodo/pkg/models"
+	"github.com/markovk1n/webTodo/internal/models"
 )
 
 type TodoItemPostgres struct {
