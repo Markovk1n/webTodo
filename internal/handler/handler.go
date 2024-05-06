@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"html/template"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/markovk1n/webTodo/docs"
 
@@ -11,11 +14,15 @@ import (
 )
 
 type Handler struct {
+	tmpl     *template.Template
 	services *service.Service
 }
 
 func NewHandler(service *service.Service) *Handler {
-	return &Handler{services: service}
+	return &Handler{
+		tmpl:     template.Must(template.ParseGlob("./templates/*.html")),
+		services: service,
+	}
 }
 
 // @contact.name   API Support
@@ -26,8 +33,11 @@ func NewHandler(service *service.Service) *Handler {
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
+	router.SetHTMLTemplate(h.tmpl)
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	router.GET("/", h.home)
 
 	auth := router.Group("/auth")
 	{
@@ -60,4 +70,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		}
 	}
 	return router
+}
+
+func (h *Handler) home(c *gin.Context) {
+
+	c.HTML(http.StatusOK, "index.html", "HELLO")
+
 }
